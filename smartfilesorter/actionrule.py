@@ -31,10 +31,14 @@ class ActionRule(object):
         :param dry_run: Actually perform the action if False, just log messages if True
         :return: boolean, True if processing should continue
         """
-        self.logger.debug("Performing action {0}: {1} on {2}".format(self.config_name, self.value, target))
-        result = self.action(target, dry_run)
-        self.logger.debug("Result: {0}".format(result))
-        return result
+        if dry_run is False:
+            self.logger.debug("Performing action {0} on {1}".format(self.config_name, target))
+        else:
+            self.logger.debug("Dry-run: Skipping action {0} on {1}".format(self.config_name, target))
+
+        continue_processing = self.action(target, dry_run)
+        self.logger.debug("Continue processing? {0}".format(continue_processing))
+        return continue_processing
 
     def action(self, target):
         raise NotImplementedError

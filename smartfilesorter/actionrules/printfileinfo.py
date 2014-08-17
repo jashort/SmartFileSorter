@@ -26,7 +26,5 @@ class PrintFileInfo(ActionRule):
                 print("{0}\t{1}".format(filename, size))
             except IOError:
                 self.logger.error("Error getting size for file: {0}".format(target))
-        else:
-            self.logger.info("Dry Run: action skipped")
 
         return self.continue_processing
