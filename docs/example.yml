@@ -1,0 +1,21 @@
+#-----------------------------------------------------------------------------
+# Example PyFileMover rule file
+#-----------------------------------------------------------------------------
+
+# Name is a descriptive name of the rule
+# Match is a list of the rules that the file must match for this rule to
+# apply (boolean AND)
+# Action is a list of actions to apply to the file if all rules match
+- name: Ignore images that start with "a"
+  match:
+    file-extension-is: .jpg .gif .png .jpeg
+    filename-starts-with: a
+  action:
+    stop-processing
+
+- name: Move Logs
+  match:
+    file-extension-is: .log
+    filename-ends-with: z
+  action:
+    continue-processing
