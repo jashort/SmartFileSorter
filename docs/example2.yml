@@ -1,0 +1,14 @@
+#-----------------------------------------------------------------------------
+# Example SmartFileSorter rule file
+#-----------------------------------------------------------------------------
+
+# Name is a descriptive name of the rule
+# Match is a list of the rules that the file must match for this rule to
+# apply (boolean AND)
+# Action is a list of actions to apply to the file if all rules match
+- name: Print file info for files that start with the letter "t"
+  match:
+    filename-starts-with: t
+  action:
+    print-file-info
+
