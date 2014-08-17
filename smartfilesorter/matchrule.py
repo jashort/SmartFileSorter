@@ -36,7 +36,7 @@ class MatchRule(object):
         """
         self.logger.debug("Running test {0}: {1}".format(self.config_name, self.match_value))
         result = self.test(target)
-        self.logger.debug("Result: {0}".format(result))
+        self.logger.debug("File matches? {0}".format(result))
         return result
 
     def test(self, target):
