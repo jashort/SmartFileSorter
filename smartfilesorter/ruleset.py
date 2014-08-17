@@ -20,6 +20,10 @@ class RuleSet(object):
         self.available_match_plugins = match_plugins
         self.available_action_plugins = action_plugins
 
+        self.add_action_rules(yaml_section['action'])
+        self.add_match_rules(yaml_section['match'])
+
+
     def __str__(self):
         return self.__repr__()
 
@@ -44,4 +48,52 @@ class RuleSet(object):
             self.logger.error("Plugin with config_name {0} not found".format(config_name))
             raise IndexError("Plugin with config_name {0} not found".format(config_name))
 
+    def matches_all_rules(self, target_filename):
+        """
+        Returns true if the given file matches all the rules in this ruleset.
+        :param target_filename:
+        :return: boolean
+        """
 
+        for rule in self.match_rules:
+            if rule.matches(target_filename) is False:
+                return False
+
+        return True
+
+    def do_actions(self, target_filename, dry_run=False):
+        """
+        Runs all the given action rules in this ruleset on target_filename
+        :param target_filename:
+        :return: boolean true|false if further rules should be processed on this file
+        """
+        continue_processing = True
+        for rule in self.action_rules:
+            if continue_processing is True:
+                continue_processing = rule.do_action(target_filename, dry_run)
+
+        return continue_processing
+
+    def add_action_rules(self, action_rules):
+        """
+        Add the given action rules to the ruleset. Handles single rules or a list of rules.
+        :param action_rules: Object representing YAML section from config file
+        :return:
+        """
+        if type(action_rules) == dict:
+            for r in action_rules:
+                self.add_action_rule(r, action_rules[r])
+        else:
+            self.add_action_rule(action_rules)
+
+    def add_match_rules(self, match_rules):
+        """
+        Add the given match rules to the ruleset. Handles single rules or a list of rules.
+        :param match_rules: Object representing YAML section from config file
+        :return:
+        """
+        if type(match_rules) == dict:
+            for r in match_rules:
+                self.add_match_rule(r, match_rules[r])
+        # else:
+        #self.add_match_rule(match_rules[0])
