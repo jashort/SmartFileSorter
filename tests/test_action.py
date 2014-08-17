@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-test_action
+test_action.py
 ----------------------------------
 
 Tests for action rules

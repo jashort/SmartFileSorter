@@ -23,23 +23,23 @@ test_requirements = [
 ]
 
 setup(
-    name='pyfilemover',
+    name='SmartFileSorter',
     version='0.1.0',
     description='Rule-based file mover/renamer',
     long_description=readme + '\n\n' + history,
     author='Jason Short',
     author_email='jason@sheersky.com',
-    url='https://github.com/jashort/pyfilemover',
+    url='https://github.com/jashort/SmartFileSorter',
     packages=[
-        'pyfilemover',
+        'smartfilesorter',
     ],
-    package_dir={'pyfilemover':
-                 'pyfilemover'},
+    package_dir={'smartfilesorter':
+                 'smartfilesorter'},
     include_package_data=True,
     install_requires=requirements,
     license="BSD",
     zip_safe=False,
-    keywords='pyfilemover',
+    keywords='SmartFileSorter',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',

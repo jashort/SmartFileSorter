@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-test_smartfilesorter
+test_smartfilesorter.py
 ----------------------------------
 
 Tests for `smartfilesorter` module.
@@ -12,7 +12,7 @@ import unittest
 from smartfilesorter.sfs import SmartFileSorter
 
 
-class TestPyfilemover(unittest.TestCase):
+class TestSmartFileSorter(unittest.TestCase):
 
     def setUp(self):
         self.mover = SmartFileSorter()

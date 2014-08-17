@@ -4,9 +4,9 @@ Installation
 
 At the command line::
 
-    $ easy_install pyfilemover
+    $ easy_install smartfilemover
 
 Or, if you have virtualenvwrapper installed::
 
-    $ mkvirtualenv pyfilemover
-    $ pip install pyfilemover
+    $ mkvirtualenv smartfilemover
+    $ pip install smartfilemover

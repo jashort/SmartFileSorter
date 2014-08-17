@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 """
-test_pyfilemover
+test_match.py
 ----------------------------------
 
-Tests for `pyfilemover` module.
+Tests for match rules
 """
 
 import unittest

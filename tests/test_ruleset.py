@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 """
-test_sfs
+test_ruleset.py
 ----------------------------------
 
-Tests for `pyfilemover` module.
+Tests for `Ruleset` module.
 """
 
 import unittest

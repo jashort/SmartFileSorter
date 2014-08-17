@@ -25,7 +25,7 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 lint:
-	flake8 pyfilemover tests
+	flake8 SmartFileSorter tests
 
 test:
 	python setup.py test
@@ -34,15 +34,15 @@ test-all:
 	tox
 
 coverage:
-	coverage run --source pyfilemover setup.py test
+	coverage run --source SmartFileSorter setup.py test
 	coverage report -m
 	coverage html
 	open htmlcov/index.html
 
 docs:
-	rm -f docs/pyfilemover.rst
+	rm -f docs/SmartFileSorter.rst
 	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ pyfilemover
+	sphinx-apidoc -o docs/ SmartFileSorter
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	open docs/_build/html/index.html
