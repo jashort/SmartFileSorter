@@ -12,13 +12,14 @@ import unittest
 
 from smartfilesorter.ruleset import RuleSet
 from smartfilesorter.matchrules.filenamestartswith import FilenameStartsWith
+from smartfilesorter.matchrules.fileextensionis import FileExtensionIs
 from smartfilesorter.actionrules.stopprocessing import StopProcessing
 
 
 class TestRuleSet(unittest.TestCase):
     def setUp(self):
         # Create mock objects for the plugins
-        match_plugins = {'filename-starts-with': FilenameStartsWith}
+        match_plugins = {'filename-starts-with': FilenameStartsWith, 'file-extension-is': FileExtensionIs}
         action_plugins = {'stop-processing': StopProcessing}
         # Represents a single section of the YAML config file
         test_yaml = {'action': 'stop-processing',
