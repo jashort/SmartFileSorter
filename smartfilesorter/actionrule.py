@@ -8,6 +8,13 @@ import logging
 import os
 
 
+class StopProcessingException(Exception):
+    """
+    Exception indicates processing should stop for the current file in the current ruleset
+    """
+    pass
+
+
 class ActionRule(object):
     """
     Base class for file matching rules. Handles logging. Shouldn't be used directly.
@@ -17,8 +24,6 @@ class ActionRule(object):
 
     def __init__(self, value):
         self.value = value                   # Where to copy/move file to (if applicable)
-        self.continue_processing = False     # Continue processing rules after performing
-                                             # this action?
         self.logger = logging.getLogger('SmartFileSorter.ActionRule')
         self.logger.debug("Created action rule {0}: {1}".format(self.config_name, self.value))
 
@@ -29,16 +34,16 @@ class ActionRule(object):
         """
         :param target: Full path and filename to test against this rule
         :param dry_run: Actually perform the action if False, just log messages if True
-        :return: boolean, True if processing should continue
+        :return: filename: Full path and filename after action (e.g., if the file was moved)
         """
         if dry_run is False:
             self.logger.debug("Performing action {0} on {1}".format(self.config_name, target))
         else:
             self.logger.debug("Dry-run: Skipping action {0} on {1}".format(self.config_name, target))
 
-        continue_processing = self.action(target, dry_run)
-        self.logger.debug("Continue processing? {0}".format(continue_processing))
-        return continue_processing
+        new_filename = self.action(target, dry_run)
+        self.logger.debug("Continue processing? {0}".format(new_filename))
+        return new_filename
 
     def action(self, target):
         raise NotImplementedError
