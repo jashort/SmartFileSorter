@@ -10,7 +10,7 @@ Tests for action rule stopprocessing
 
 import unittest
 from smartfilesorter.actionrules.stopprocessing import StopProcessing
-from smartfilesorter.actionrule import StopProcessingException
+from actionrule import StopProcessingException
 
 
 class TestStopProcessing(unittest.TestCase):

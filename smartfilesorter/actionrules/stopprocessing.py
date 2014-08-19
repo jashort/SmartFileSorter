@@ -1,5 +1,5 @@
 from actionrule import ActionRule
-from smartfilesorter.actionrule import StopProcessingException
+from actionrule import StopProcessingException
 
 
 class StopProcessing(ActionRule):
