@@ -1,5 +1,5 @@
 import logging
-from actionrule import StopProcessingException
+
 
 class RuleSet(object):
     """
