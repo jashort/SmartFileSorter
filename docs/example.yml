@@ -18,4 +18,4 @@
     file-extension-is: .log
     filename-ends-with: z
   action:
-    continue-processing
+    stop-processing
