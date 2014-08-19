@@ -23,7 +23,6 @@ class RuleSet(object):
         self.add_action_rules(yaml_section['action'])
         self.add_match_rules(yaml_section['match'])
 
-
     def __str__(self):
         return self.__repr__()
 
