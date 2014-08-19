@@ -23,9 +23,9 @@ class MoveTo(ActionRule):
         new_filename = target
 
         if dry_run is False:
-            self.logger.debug("Moving {0} to {1}".format(target, new_filename))
             base_name = os.path.basename(target)
             new_filename = os.path.join(self.destination, base_name)
+            self.logger.debug("Moving {0} to {1}".format(target, new_filename))
 
             if not os.path.exists(new_filename):
                 try:
