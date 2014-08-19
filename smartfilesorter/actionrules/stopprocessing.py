@@ -1,4 +1,5 @@
 from actionrule import ActionRule
+from smartfilesorter.actionrule import StopProcessingException
 
 
 class StopProcessing(ActionRule):
@@ -16,6 +17,6 @@ class StopProcessing(ActionRule):
         """
         :param target: Full path and filename
         :param dry_run: True - don't actually perform action. False: perform action. No effect for this rule.
-        :return: boolean - Continue processing rules for this file?
+        :return: None
         """
-        return self.continue_processing
+        raise StopProcessingException()

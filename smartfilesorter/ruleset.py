@@ -1,5 +1,5 @@
 import logging
-
+from actionrule import StopProcessingException
 
 class RuleSet(object):
     """
@@ -65,14 +65,12 @@ class RuleSet(object):
         """
         Runs all the given action rules in this ruleset on target_filename
         :param target_filename:
-        :return: boolean true|false if further rules should be processed on this file
-        """
-        continue_processing = True
+        :retrn: filename Filename and path after any actions have been completed
+\        """
         for rule in self.action_rules:
-            if continue_processing is True:
-                continue_processing = rule.do_action(target_filename, dry_run)
+                target_filename = rule.do_action(target_filename, dry_run)
 
-        return continue_processing
+        return target_filename
 
     def add_action_rules(self, action_rules):
         """

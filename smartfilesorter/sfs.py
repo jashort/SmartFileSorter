@@ -8,7 +8,7 @@ import os
 import yaml
 import inspect
 from ruleset import RuleSet
-
+from actionrule import StopProcessingException
 
 class SmartFileSorter(object):
     def __init__(self):
@@ -192,8 +192,8 @@ if __name__ == '__main__':
                 # If the file matches all rules in the ruleset, do whatever
                 # actions the ruleset specifies. Stop processing if the
                 # ruleset says stop.
-                keep_processing = ruleset.do_actions(cur_file, args.dry_run)
-                if keep_processing is not True:
-                    m.logger.debug("Stopping processing for this file")
+                try:
+                    ruleset.do_actions(cur_file, args.dry_run)
+                except StopProcessingException:
                     break
 
