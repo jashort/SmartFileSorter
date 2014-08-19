@@ -18,21 +18,24 @@ class MoveTo(ActionRule):
         """
         :param target: Full path and filename
         :param dry_run: True - don't actually perform action. False: perform action. No effect for this rule.
-        :return: boolean - Continue processing rules for this file?
+        :return: filename: Full path and filename after action completes
         """
-        if dry_run is False:
-            base_name = os.path.basename(target)
-            new_name = os.path.join(self.destination, base_name)
+        new_filename = target
 
-            if not os.path.exists(new_name):
+        if dry_run is False:
+            self.logger.debug("Moving {0} to {1}".format(target, new_filename))
+            base_name = os.path.basename(target)
+            new_filename = os.path.join(self.destination, base_name)
+
+            if not os.path.exists(new_filename):
                 try:
                     shutil.move(target, self.destination)
                 except IOError:
                     self.logger.error("Error moving file {0} to {1}".format(target, self.destination))
                     raise IOError
             else:
-                self.logger.error("Destination file already exists: {0}".format(new_name))
+                self.logger.error("Destination file already exists: {0}".format(new_filename))
                 raise IOError
 
 
-        return self.continue_processing
+        return new_filename
