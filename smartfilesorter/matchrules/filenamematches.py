@@ -24,4 +24,7 @@ class FilenameMatches(MatchRule):
         path, filename = os.path.split(target)
         filename, extension = os.path.splitext(filename)
 
-        return re.match(self.match_value, filename)
+        if re.match(self.match_value, filename) is not None:
+            return True
+        else:
+            return False
