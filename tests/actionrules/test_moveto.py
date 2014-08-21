@@ -16,7 +16,7 @@ import shutil
 from smartfilesorter.actionrules.moveto import MoveTo
 
 
-class TestContinueProcessing(unittest.TestCase):
+class TestMoveTo(unittest.TestCase):
     def setUp(self):
         # Make a temp directory and test file
         self.source_dir = tempfile.mkdtemp()
