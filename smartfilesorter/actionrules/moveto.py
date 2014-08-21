@@ -11,7 +11,7 @@ class MoveTo(ActionRule):
 
     def __init__(self, destination):
         super(MoveTo, self).__init__(destination)
-        self.destination = destination
+        self.destination = os.path.expanduser(destination)
         self.continue_processing = False
 
     def action(self, target, dry_run=False):
