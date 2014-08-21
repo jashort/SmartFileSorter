@@ -14,11 +14,14 @@ class RenameTo(ActionRule):
     def __init__(self, parameters):
         super(RenameTo, self).__init__(parameters)
         if 'match' in parameters:
-            self.match = parameters['match'].strip()
+            self.match = parameters['match']
         else:
             raise ValueError('rename-to rule must have parameter "match"')
         if 'replace-with' in parameters:
-            self.replace_with = parameters['replace-with'].strip()
+            if parameters['replace-with'] is None:
+                self.replace_with = ''
+            else:
+                self.replace_with = parameters['replace-with']
         else:
             raise ValueError('rename-to rule must have "replace-with" parameter')
 
