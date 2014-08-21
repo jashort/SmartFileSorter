@@ -12,8 +12,15 @@
   action:
     print-file-info
 
-#- name: Rename Example
-#  match:
-#    filename-starts-with: t
-#  action:
-#    rename-to: abc >> def
+# An example of renaming files
+- name: Rename Example
+  match:
+    filename-starts-with: t
+  action:
+    rename-to:
+      {match: abc, replace-with: def}
+
+  # Alternately, values can be specified one per line:
+    rename-to:
+      match: abc
+      replace-with: def

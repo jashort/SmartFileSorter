@@ -9,11 +9,14 @@ class RenameTo(ActionRule):
     """
     config_name = 'rename-to'
 
-    def __init__(self, value):
-        super(RenameTo, self).__init__(value)
-        match, replace_with = value.strip().split('>>')
-        self.match = match.strip()
-        self.replace_with = replace_with.strip()
+    def __init__(self, parameters):
+        super(RenameTo, self).__init__(parameters)
+        if not 'match' in parameters:
+            raise ValueError('rename-to rule created without match value')
+        if not 'replace-with' in parameters:
+            raise ValueError('rename-to rule created without replace-with value')
+        self.match = parameters['match'].strip()
+        self.replace_with = parameters['replace-with'].strip()
 
     def action(self, target, dry_run=False):
         """

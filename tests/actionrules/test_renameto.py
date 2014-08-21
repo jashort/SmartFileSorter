@@ -25,7 +25,7 @@ class TestContinueProcessing(unittest.TestCase):
         with open(self.source_file, 'w') as output:
             output.write("This is a test file.")
 
-        self.action = RenameTo('abc_ >> ')
+        self.action = RenameTo({'match': 'abc_', 'replace-with': ''})
 
     def test_renameto(self):
         # Test that renameto works with the simple case - source file exists, dest file does not exist,
