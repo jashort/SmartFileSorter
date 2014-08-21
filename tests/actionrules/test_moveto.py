@@ -51,8 +51,8 @@ class TestMoveTo(unittest.TestCase):
         # Test that error is raised when destination file exists
         shutil.copy(self.source_file, self.dest_dir)
         self.assertRaises(IOError, self.action.do_action, self.source_file)
-        self.assertTrue(os.path.isfile(self.source_file), "Source file still exists")
-        self.assertTrue(os.path.isfile(self.source_file), "Source file still exists")
+        self.assertTrue(os.path.isfile(self.source_file), "Source file does not exist")
+        self.assertTrue(os.path.isfile(self.dest_file), "Destination file does not exist and should")
 
     def tearDown(self):
         # Clean up temp files
