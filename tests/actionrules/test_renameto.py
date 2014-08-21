@@ -12,7 +12,7 @@ import shutil
 from smartfilesorter.actionrules.renameto import RenameTo
 
 
-class TestContinueProcessing(unittest.TestCase):
+class TestRenameTo(unittest.TestCase):
     def setUp(self):
         # Make a temp directory and test file
         self.source_dir = tempfile.mkdtemp()
@@ -42,12 +42,15 @@ class TestContinueProcessing(unittest.TestCase):
         self.assertFalse(os.path.isfile(self.destination_file), "Destination file does not exist")
         self.assertTrue(os.path.isfile(self.source_file), "Source file still exists")
 
-    # def test_moveto_dest_exists(self):
-    #     # Test that error is raised when destination file exists
-    #     shutil.copy(self.source_file, self.dest_dir)
-    #     self.assertRaises(IOError, self.action.do_action, self.source_file)
-    #     self.assertTrue(os.path.isfile(self.source_file), "Source file still exists")
-    #     self.assertTrue(os.path.isfile(self.source_file), "Source file still exists")
+
+    def test_rename_with_regex(self):
+        # Test that renameto works with a regular expression as the match string
+        a = RenameTo({'match': '^[a-z][a-z]c_', 'replace-with': ''})
+        new_filename = a.do_action(self.source_file)
+        self.assertEqual(self.destination_file, new_filename)
+        self.assertTrue(os.path.isfile(self.destination_file), "Destination file does not exist")
+        self.assertFalse(os.path.isfile(self.source_file), "Source file still exists")
+
 
     def tearDown(self):
         # Clean up temp files
