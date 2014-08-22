@@ -26,15 +26,19 @@ class MoveTo(ActionRule):
         # If the file exists in the destination directory, append _NNN to the name where NNN is
         # a zero padded number. Starts at _001
         while os.path.exists(new_filename):
-            # if filename ends in _NNN, start there
+            # if filename ends in _NNN, start at that number
             filename, extension = os.path.splitext(os.path.basename(new_filename))
             if filename[-4] == '_' and filename[-3:].isdigit():
-                current = int(filename[-3:]) + 1
+                # Split the number off the filename and increment it, handle suffixes longer than 3 numbers
+                current = filename.split('_')[-1]
+                filename_root = filename[0:-len(current)]
+                current = int(current) + 1
                 new_filename = os.path.join(self.destination,
-                                            (filename[:-4] +
+                                            (filename_root +
                                              "_{0:03d}".format(current) +
                                              extension))
             else:
+                # No number suffix found in the filename, just start at _001
                 new_filename = os.path.join(self.destination,
                                             (filename + "_001" + extension))
 
