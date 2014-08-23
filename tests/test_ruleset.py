@@ -38,15 +38,15 @@ class TestRuleSet(unittest.TestCase):
         self.assertGreaterEqual(len(self.ruleset.available_action_plugins), 1)
 
     def test_add_match_rule(self):
-        self.ruleset.add_match_rule(config_name='filename-starts-with', value='abcdef')
+        self.ruleset.add_match_rule({'filename-starts-with': 'abcdef'})
         self.assertGreaterEqual(len(self.ruleset.match_rules), 1)
 
     def test_add_action_rule_without_value(self):
-        self.ruleset.add_action_rule(config_name='stop-processing')
+        self.ruleset.add_action_rule('stop-processing')
         self.assertGreaterEqual(len(self.ruleset.action_rules), 1)
 
     def test_add_action_rule_with_value(self):
-        self.ruleset.add_action_rule(config_name='stop-processing', value='not needed for this rule')
+        self.ruleset.add_action_rule({'stop-processing': 'not needed for this rule'})
         self.assertGreaterEqual(len(self.ruleset.action_rules), 1)
 
     def test_add_nonexistent_rule(self):
