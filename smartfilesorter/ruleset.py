@@ -29,18 +29,27 @@ class RuleSet(object):
     def __repr__(self):
         return 'Ruleset: {0}'.format(self.name)
 
-    def add_match_rule(self, config_name, value):
-        self.logger.debug('Adding match rule {0}: {1}'.format(config_name, value))
+    def add_match_rule(self, rule):
+        self.logger.debug('Adding match rule {0}'.format(rule))
+        # Handle rules that are just a string, like 'stop-processing'
+        if type(rule) == str:
+            self.add_rule(rule, None, self.available_match_plugins, self.match_rules)
+        # Handle rules built from key-value pairs
+        elif type(rule) == dict:
+            for r in rule:
+                self.add_rule(r, rule[r], self.available_match_plugins, self.match_rules)
 
-        self.add_rule(config_name, value, self.available_match_plugins, self.match_rules)
-
-    def add_action_rule(self, config_name, value=None):
-        self.logger.debug('Adding action rule {0}: {1}'.format(config_name, value))
-        self.add_rule(config_name, value, self.available_action_plugins, self.action_rules)
+    def add_action_rule(self, rule):
+        self.logger.debug('Adding action rule {0}'.format(rule))
+        # Handle rules that are just a string, like 'stop-processing'
+        if type(rule) == str:
+            self.add_rule(rule, None, self.available_action_plugins, self.action_rules)
+        # Handle rules built from key-value pairs
+        elif type(rule) == dict:
+            for r in rule:
+                self.add_rule(r, rule[r], self.available_action_plugins, self.action_rules)
 
     def add_rule(self, config_name, value, plugins, destination):
-        self.logger.debug('Adding rule {0}: {1}'.format(config_name, value))
-
         if config_name in plugins:
             destination.append(plugins[config_name](value))
         else:
@@ -76,11 +85,15 @@ class RuleSet(object):
         Add the given action rules to the ruleset. Handles single rules or a list of rules.
         :param action_rules: Object representing YAML section from config file
         :return:
+
+        Example action_rules object:
+            ['print-file-info', {'move-to': '/tmp'}, 'stop-processing']
         """
-        if type(action_rules) == dict:
+        if type(action_rules) == list:
             for r in action_rules:
-                self.add_action_rule(r, action_rules[r])
+                self.add_action_rule(r)
         else:
+            # Handle a single rule being passed in that's not in a list
             self.add_action_rule(action_rules)
 
     def add_match_rules(self, match_rules):
@@ -88,9 +101,13 @@ class RuleSet(object):
         Add the given match rules to the ruleset. Handles single rules or a list of rules.
         :param match_rules: Object representing YAML section from config file
         :return:
+
+        Example match_rules object:
+            [{'filename-starts-with': 'abc'}, {'filename-ends-with': 'xyz']
         """
-        if type(match_rules) == dict:
+        if type(match_rules) == list:
             for r in match_rules:
-                self.add_match_rule(r, match_rules[r])
-        # else:
-        #self.add_match_rule(match_rules[0])
+                self.add_match_rule(r)
+        else:
+            # Handle a single rule being passed in that's not in a list
+            self.add_match_rule(match_rules)

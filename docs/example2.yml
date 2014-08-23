@@ -8,19 +8,19 @@
 # Action is a list of actions to apply to the file if all rules match
 - name: Print file info for files that start with the letter "t"
   match:
-    filename-starts-with: t
+    - filename-starts-with: t
   action:
-    print-file-info
+    - print-file-info
 
 # An example of renaming files
 - name: Rename Example
   match:
-    filename-starts-with: t
+    - filename-starts-with: t
   action:
-    rename-to:
-      {match: abc, replace-with: def}
+    - rename-to: {match: abc, replace-with: def}
 
   # Alternately, values can be specified one per line:
-    rename-to:
-      match: abc
-      replace-with: def
+    - rename-to:
+        match: abc
+        replace-with: def
+

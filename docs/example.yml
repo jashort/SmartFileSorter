@@ -8,14 +8,14 @@
 # Action is a list of actions to apply to the file if all rules match
 - name: Ignore images that start with "a"
   match:
-    file-extension-is: .jpg .gif .png .jpeg
-    filename-starts-with: a
+    - file-extension-is: .jpg .gif .png .jpeg
+    - filename-starts-with: a
   action:
-    stop-processing
+    - stop-processing
 
 - name: Move Logs
   match:
-    file-extension-is: .log
-    filename-ends-with: z
+    - file-extension-is: .log
+    - filename-ends-with: z
   action:
-    stop-processing
+    - stop-processing
