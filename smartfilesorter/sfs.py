@@ -41,15 +41,21 @@ class SmartFileSorter(object):
         Configure the program's logger object.
 
         Log levels:
-        INFO - information only, hidden unless --debug is used
+        DEBUG - Log everything. Hidden unless --debug is used.
+        INFO - information only
         ERROR - Critical error
         :param args: Object containing program's parsed command line arguments
-        :return: logger
+        :return:
         """
         # Set up logging
+        self.logger.level = logging.INFO
+
+        if args.debug is True:
+            self.logger.setLevel(logging.DEBUG)
+
         file_log_formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)s %(message)s',
                                                '%Y-%m-%d %H:%M:%S')
-        console_log_formatter = logging.Formatter('%(name)s %(message)s')
+        console_log_formatter = logging.Formatter('%(message)s')
 
         # Log to stdout
         stdout_stream = logging.StreamHandler(stream=sys.stdout)
@@ -61,9 +67,6 @@ class SmartFileSorter(object):
             logfile_stream = logging.StreamHandler(stream=args.log)
             logfile_stream.setFormatter(file_log_formatter)
             self.logger.addHandler(logfile_stream)
-
-        if args.debug is True:
-            self.logger.setLevel(logging.DEBUG)
 
         if args.dry_run is True:
             self.logger.info('Running with --dry-run parameter. Actions will not be executed.')
@@ -81,7 +84,7 @@ class SmartFileSorter(object):
             yield path
             return
 
-        self.logger.info('Getting list of files in {0}'.format(path))
+        self.logger.debug('Getting list of files in {0}'.format(path))
 
         try:
             for f in os.listdir(path):
@@ -98,7 +101,7 @@ class SmartFileSorter(object):
         :param in_file: stream object containing rules YAML
         :return: rules object
         """
-        self.logger.info('Reading rules from %s', in_file.name)
+        self.logger.debug('Reading rules from %s', in_file.name)
         try:
             y = yaml.load(in_file)
         except yaml.YAMLError as exc:

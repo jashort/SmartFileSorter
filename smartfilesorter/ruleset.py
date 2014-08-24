@@ -1,5 +1,5 @@
 import logging
-
+import os
 
 class RuleSet(object):
     """
@@ -67,6 +67,9 @@ class RuleSet(object):
             if rule.matches(target_filename) is False:
                 return False
 
+        self.logger.info('{0}: {1} - {2}'.format(self.name,
+                                                 os.path.basename(target_filename),
+                                                 'Match'))
         return True
 
     def do_actions(self, target_filename, dry_run=False):

@@ -23,7 +23,7 @@ class ActionRule(object):
                                              # Must be unique across plugins
 
     def __init__(self, value):
-        self.value = value                   # Where to copy/move file to (if applicable)
+        self.value = value
         self.logger = logging.getLogger('SmartFileSorter.ActionRule')
         self.logger.debug("Created action rule {0}: {1}".format(self.config_name, self.value))
 
@@ -37,12 +37,12 @@ class ActionRule(object):
         :return: filename: Full path and filename after action (e.g., if the file was moved)
         """
         if dry_run is False:
-            self.logger.debug("Performing action {0} on {1}".format(self.config_name, target))
+            self.logger.info("Action {0} on {1}".format(self.config_name, os.path.basename(target)))
         else:
-            self.logger.debug("Dry-run: Skipping action {0} on {1}".format(self.config_name, target))
+            self.logger.info("Dry-run: Skipping {0} on {1}".format(self.config_name, os.path.basename(target)))
 
         new_filename = self.action(target, dry_run)
-        self.logger.debug("Continue processing? {0}".format(new_filename))
+        self.logger.debug("Filename is now: {0}".format(new_filename))
         return new_filename
 
     def action(self, target):
