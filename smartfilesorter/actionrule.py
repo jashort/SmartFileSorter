@@ -37,9 +37,9 @@ class ActionRule(object):
         :return: filename: Full path and filename after action (e.g., if the file was moved)
         """
         if dry_run is False:
-            self.logger.info("Action {0} on {1}".format(self.config_name, os.path.basename(target)))
+            self.logger.debug("Action {0} on {1}".format(self.config_name, os.path.basename(target)))
         else:
-            self.logger.info("Dry-run: Skipping {0} on {1}".format(self.config_name, os.path.basename(target)))
+            self.logger.debug("Dry-run: Skipping {0} on {1}".format(self.config_name, os.path.basename(target)))
 
         new_filename = self.action(target, dry_run)
         self.logger.debug("Filename is now: {0}".format(new_filename))
