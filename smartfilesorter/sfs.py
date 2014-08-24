@@ -187,11 +187,16 @@ if __name__ == '__main__':
 
     rules = m.build_rules(rule_yaml, match_plugins, action_plugins)
 
+    files_analyzed = 0
+    files_matched = 0
+
     for cur_file in m.get_files(args.source_directory_or_file):
         m.logger.debug("Processing {0}".format(cur_file))
+        files_analyzed += 1
 
         for ruleset in rules:
             if ruleset.matches_all_rules(cur_file):
+                files_matched += 1
                 # If the file matches all rules in the ruleset, do whatever
                 # actions the ruleset specifies. Stop processing if the
                 # ruleset says stop.
@@ -200,3 +205,4 @@ if __name__ == '__main__':
                 except StopProcessingException:
                     break
 
+    m.logger.info("Files matched: {0}/{1}".format(files_matched, files_analyzed))
