@@ -48,7 +48,7 @@ Rule files are YAML and consist of multipe sections called rule sets, each repre
 a collection of rules that each file must mach, and the action(s) to take if the file
 does match. For example:
 
-.. code:: YAML
+.. code-block:: yaml
 
 # Example rule file
 # Move and rename data files based on type
