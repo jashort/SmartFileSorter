@@ -24,6 +24,7 @@ append a suffix to the file before moving it.
 
 Usage
 -----
+.. code::
   sfs.py RULEFILE DIRECTORY [--debug] [--dry-run] [--log <filename>]
   sfs.py [--debug] --list-plugins
 
