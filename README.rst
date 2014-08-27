@@ -36,3 +36,36 @@ Usage
     --dry-run       Log actions but do not make any changes
     --log FILE      Specify log output file
     --list-plugins  Print match and action plugin information
+
+
+::
+
+
+Simple Rule File Example
+------------------------
+
+Rule files are YAML and consist of multipe sections called rule sets, each representing
+a collection of rules that each file must mach, and the action(s) to take if the file
+does match. For example:
+
+.. code:: YAML
+
+# Example rule file
+# Move and rename data files based on type
+- name: Move CSV Files
+  match:                               # For a file to match this ruleset:
+    - filename-starts-with: mapping-   #   The filename starts with "mapping-"
+    - file-extension-is: .csv          #   The file extension is ".csv"
+  action:
+    - rename-to:                       # In the filename, do a search and replace for
+        match: mapping-                # "mapping-" and replace it with "map" 
+        replace-with: map
+    - move-to: ~/data/map/csv/         # And move the file to the directory ~/data/map/
+
+- name: Move DAT Files                 
+  match:                               # For a file to match this ruleset:
+    - file-extension-is: .dat .xml     #   The file extension is ".dat" or ".xml"
+  action:
+    - move-to: ~/data/map/dat/         # Move the file to the directory ~/data/map/dat/
+
+::
