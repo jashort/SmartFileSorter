@@ -9,6 +9,7 @@ import yaml
 import inspect
 from ruleset import RuleSet
 from actionrule import StopProcessingException
+import docopt
 
 class SmartFileSorter(object):
     def __init__(self):
@@ -21,19 +22,20 @@ class SmartFileSorter(object):
         :return: object
         """
         # Define and parse command line arguments
-        parser = argparse.ArgumentParser(description='Rule based file mover/renamer')
-        parser.add_argument('filename', type=argparse.FileType('r'), help='Rules to process')
-        parser.add_argument('source_directory_or_file', type=str, help='Source directory or filename')
-        parser.add_argument('--log', type=argparse.FileType('w'), default=None, help='Output Log Filename')
-        parser.add_argument('--debug',
-                            action='store_true',
-                            default=False,
-                            help='Enable extra log information')
-        parser.add_argument('--dry-run',
-                            action='store_true',
-                            default=False,
-                            help='Log actions that would be executed but does not execute them')
-        self.args = parser.parse_args()
+        self.args = docopt.docopt("""
+Smart File Sorter
+
+Usage:
+  sfs.py RULEFILE DIRECTORY [--debug] [--dry-run] [--log <filename>]
+  sfs.py [--debug] --list-plugins
+
+    RULEFILE        Rule configuration file to execute
+    DIRECTORY       Directory of files to process
+    --debug         Log extra information during processing
+    --dry-run       Log actions but do not make any changes
+    --log FILE      Specify log output file
+    --list-plugins  Print match and action plugin information
+        """)
         return self.args
 
     def create_logger(self, args):
@@ -50,7 +52,7 @@ class SmartFileSorter(object):
         # Set up logging
         self.logger.level = logging.INFO
 
-        if args.debug is True:
+        if args['--debug'] is True:
             self.logger.setLevel(logging.DEBUG)
 
         file_log_formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)s %(message)s',
@@ -63,12 +65,13 @@ class SmartFileSorter(object):
         self.logger.addHandler(stdout_stream)
 
         # Log to file if the option is chosen
-        if args.log is not None:
-            logfile_stream = logging.StreamHandler(stream=args.log)
+        if args['--log'] is not None:
+            logfile = open(args['--log'], 'w')
+            logfile_stream = logging.StreamHandler(stream=logfile)
             logfile_stream.setFormatter(file_log_formatter)
             self.logger.addHandler(logfile_stream)
 
-        if args.dry_run is True:
+        if args['--dry-run'] is True:
             self.logger.info('Running with --dry-run parameter. Actions will not be executed.')
 
     def get_files(self, path):
@@ -95,13 +98,19 @@ class SmartFileSorter(object):
             self.logger.error('Could not read files from {0}'.format(path))
             sys.exit(1)
 
-    def load_rules(self, in_file):
+    def load_rules(self, filename):
         """
         Load rules from YAML configuration in the given stream object
-        :param in_file: stream object containing rules YAML
+        :param filename: Filename of rule YAML file
         :return: rules object
         """
-        self.logger.debug('Reading rules from %s', in_file.name)
+        self.logger.debug('Reading rules from %s', filename)
+        try:
+            in_file = open(filename)
+        except IOError:
+            self.logger.error('Error opening {0}'.format(filename))
+            sys.exit(1)
+
         try:
             y = yaml.load(in_file)
         except yaml.YAMLError as exc:
@@ -180,17 +189,26 @@ if __name__ == '__main__':
     m = SmartFileSorter()
     args = m.parse_arguments()
     m.create_logger(args)
-    rule_yaml = m.load_rules(args.filename)
 
     match_plugins = m.load_plugins(os.path.join(script_dir, 'matchrules/'))
     action_plugins = m.load_plugins(os.path.join(script_dir, 'actionrules/'))
 
+    if args['--list-plugins'] is True:
+        print("\nAvailable Match Plugins:")
+        for m in sorted(match_plugins):
+            print(m)
+        print("\nAvailable Action Plugins:")
+        for a in sorted(action_plugins):
+            print(a)
+        sys.exit()
+
+    rule_yaml = m.load_rules(args['RULEFILE'])
     rules = m.build_rules(rule_yaml, match_plugins, action_plugins)
 
     files_analyzed = 0
     files_matched = 0
 
-    for cur_file in m.get_files(args.source_directory_or_file):
+    for cur_file in m.get_files(args['DIRECTORY']):
         m.logger.debug("Processing {0}".format(cur_file))
         files_analyzed += 1
 
@@ -201,7 +219,7 @@ if __name__ == '__main__':
                 # actions the ruleset specifies. Stop processing if the
                 # ruleset says stop.
                 try:
-                    ruleset.do_actions(cur_file, args.dry_run)
+                    ruleset.do_actions(cur_file, args['--dry-run'])
                 except StopProcessingException:
                     break
 

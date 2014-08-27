@@ -1,2 +1,5 @@
 wheel==0.23.0
 PyYAML==3.11
+PyYAML==3.11
+docopt==0.6.2
+wheel==0.23.0
