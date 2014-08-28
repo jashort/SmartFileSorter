@@ -31,7 +31,7 @@ class MoveTo(ActionRule):
             if filename[-4] == '_' and filename[-3:].isdigit():
                 # Split the number off the filename and increment it, handle suffixes longer than 3 numbers
                 current = filename.split('_')[-1]
-                filename_root = filename[0:-len(current)]
+                filename_root = filename[0:-len(current)-1]
                 current = int(current) + 1
                 new_filename = os.path.join(self.destination,
                                             (filename_root +
