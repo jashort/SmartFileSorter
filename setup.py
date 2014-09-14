@@ -29,7 +29,7 @@ setup(
     packages=[
         'smartfilesorter',
     ],
-    scripts=['bin/sfp'],
+    scripts=['bin/sfs'],
     package_dir={'smartfilesorter':
                  'smartfilesorter'},
     include_package_data=True,
