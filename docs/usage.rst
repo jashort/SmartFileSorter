@@ -15,10 +15,21 @@ To use SmartFileSorter, create a rule file. For example:
 
 
 Then run the sfp command. In this case, it will process the rules in the test.yml file against
-every file in the /tmp directory, without actually performing any actions. If there are no
-files with the .log extension in /tmp, the output would look like this::
+every file in the /tmp directory, without actually performing any actions. Assuming there are
+two files with the .log extension in /tmp (test1.log and test2.log), the output would look like
+this::
 
-    $ sfs ~/sortdl.yml /tmp --dry-run
+    $ sfs test.yml /tmp --dry-run
     Running with --dry-run parameter. Actions will not be performed.
-    Files matched: 0/4
+    Move Logs: test1.log - Match
+    Move Logs: test2.log - Match
+    Files matched: 2/10
 
+And to actually move the files, run without the --dry-run parameter::
+
+    $ sfs test.yml /tmp
+    Move Logs: test1.log - Match
+    Move Logs: test2.log - Match
+    Files matched: 2/10
+
+The two files would be moved to the directory /archive.
