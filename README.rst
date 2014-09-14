@@ -1,71 +1,26 @@
 ===============================
-SmartFileSorter
+Smart File sorter
 ===============================
 
-Rule-based file mover/renamer
+.. image:: https://badge.fury.io/py/smartfilesorter.png
+    :target: http://badge.fury.io/py/smartfilesorter
+
+.. image:: https://travis-ci.org/jashort/smartfilesorter.png?branch=master
+        :target: https://travis-ci.org/jashort/smartfilesorter
+
+.. image:: https://pypip.in/d/smartfilesorter/badge.png
+        :target: https://pypi.python.org/pypi/smartfilesorter
+
+
+Rule based file moving and renaming tool
 
 * Free software: BSD license
-
+* Documentation: https://smartfilesorter.readthedocs.org.
 
 Features
 --------
 
-SmartFileSorter is used to move files from one or more directories, to one or more
-directories, based on user-defined rules. For example:
-
-- Move uploaded files in to archive directories based on name and file modified date
-  without overwriting files that already exist
-- Move and rename server log files
-
-It also supports "safe" moves. For example, if a file with the same name already exists
-in the destination directory but is a different file (by size and md5 hash), it will 
-append a suffix to the file before moving it.
-
-
-Usage
------
-
-::
-
-  sfs.py RULEFILE DIRECTORY [--debug] [--dry-run] [--log <filename>]
-  sfs.py [--debug] --list-plugins
-
-    RULEFILE        Rule configuration file to execute
-    DIRECTORY       Directory of files to process
-    --debug         Log extra information during processing
-    --dry-run       Log actions but do not make any changes
-    --log FILE      Specify log output file
-    --list-plugins  Print match and action plugin information
-
-
-::
-
-
-Simple Rule File Example
-------------------------
-
-Rule files are YAML and consist of multipe sections called rule sets, each representing
-a collection of rules that each file must mach, and the action(s) to take if the file
-does match. For example:
-
-.. code-block:: yaml
-
-    # Example rule file
-    # Move and rename data files based on type
-    - name: Move CSV Files
-      match:                               # For a file to match this ruleset:
-        - filename-starts-with: mapping-   #   The filename starts with "mapping-"
-        - file-extension-is: .csv          #   The file extension is ".csv"
-      action:
-        - rename-to:                       # In the filename, do a search and replace for
-            match: mapping-                # "mapping-" and replace it with "map" 
-            replace-with: map
-        - move-to: ~/data/map/csv/         # And move the file to the directory ~/data/map/
-    
-    - name: Move DAT Files                 
-      match:                               # For a file to match this ruleset:
-        - file-extension-is: .dat .xml     #   The file extension is ".dat" or ".xml"
-      action:
-        - move-to: ~/data/map/dat/         # Move the file to the directory ~/data/map/dat/
-
-::
+* Moves/renames files based on rules defined in a YAML configuration file.
+* Automatically renames a file if it already exists in the destination directory by appending a sequence number to the
+  filename. (file.txt, file_001.txt, file_002.txt, etc)
+* Easy to extend with new match or action rules

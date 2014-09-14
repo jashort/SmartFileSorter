@@ -1,21 +1,20 @@
-from matchrule import MatchRule
 import os
 
 
-class FileExtensionIs(MatchRule):
+class FileExtensionIs(object):
     """
     Tests if a given file has one of the defined extensions.
     """
     config_name = 'file-extension-is'
 
-    def __init__(self, match_value):
+    def __init__(self, match_value, case_sensitive=False):
         """
         :param match_value: A string containing one or more file extensions separated by spaces. Ex: ".log .txt"
         """
-        super(FileExtensionIs, self).__init__()
         self.config_name = 'file-extension-is'
         self.extensions = match_value.split(' ')
         self.match_value = match_value
+        self.case_sensitive = case_sensitive
 
     def test(self, target):
         """

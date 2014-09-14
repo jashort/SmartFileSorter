@@ -1,0 +1,12 @@
+#-----------------------------------------------------------------------------
+# Example SmartFileSorter rule file
+#-----------------------------------------------------------------------------
+
+# This file is invalid and should raise an error when loaded
+
+- name: Ignore images that start with "a"
+  match:
+    - file-extension-is: .jpg .gif .png .jpeg
+    - filename-starts-with: a
+  action: { 
+

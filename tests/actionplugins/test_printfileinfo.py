@@ -9,7 +9,7 @@ Tests for action rule printfileinfo
 """
 
 import unittest
-from smartfilesorter.actionrules.printfileinfo import PrintFileInfo
+from smartfilesorter.actionplugins.printfileinfo import PrintFileInfo
 
 
 class TestPrintFileInfo(unittest.TestCase):
@@ -18,7 +18,7 @@ class TestPrintFileInfo(unittest.TestCase):
 
     def test_file_does_not_exist(self):
         # Should continue processing, even if it tries to perform action and can't.
-        self.assertEqual(self.action.action('this_file_does_not_exist.txt'), 'this_file_does_not_exist.txt')
+        self.assertEqual(self.action.do_action('this_file_does_not_exist.txt'), 'this_file_does_not_exist.txt')
 
 if __name__ == '__main__':
     unittest.main()

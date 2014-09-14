@@ -1,6 +1,7 @@
 import logging
 import os
 
+
 class RuleSet(object):
     """
     A ruleset is a collection of associated match rules and actions. For example:
@@ -29,29 +30,49 @@ class RuleSet(object):
     def __repr__(self):
         return 'Ruleset: {0}'.format(self.name)
 
-    def add_match_rule(self, rule):
-        self.logger.debug('Adding match rule {0}'.format(rule))
+    def add_match_rule(self, rule_config_name):
+        """
+        Adds the given match rule to this ruleset's match rules
+        :param rule_config_name: Plugin's config name
+        :return: None
+        """
+        self.logger.debug('Adding match rule {0}'.format(rule_config_name))
         # Handle rules that are just a string, like 'stop-processing'
-        if type(rule) == str:
-            self.add_rule(rule, None, self.available_match_plugins, self.match_rules)
+        if type(rule_config_name) == str:
+            self.add_rule(rule_config_name, None, self.available_match_plugins, self.match_rules)
         # Handle rules built from key-value pairs
-        elif type(rule) == dict:
-            for r in rule:
-                self.add_rule(r, rule[r], self.available_match_plugins, self.match_rules)
+        elif type(rule_config_name) == dict:
+            for r in rule_config_name:
+                self.add_rule(r, rule_config_name[r], self.available_match_plugins, self.match_rules)
 
-    def add_action_rule(self, rule):
-        self.logger.debug('Adding action rule {0}'.format(rule))
+    def add_action_rule(self, rule_config_name):
+        """
+        Adds the given action rule to this ruleset's action rules
+        :param rule_config_name:
+        :return:
+        """
+        self.logger.debug('Adding action rule {0}'.format(rule_config_name))
         # Handle rules that are just a string, like 'stop-processing'
-        if type(rule) == str:
-            self.add_rule(rule, None, self.available_action_plugins, self.action_rules)
+        if type(rule_config_name) == str:
+            self.add_rule(rule_config_name, None, self.available_action_plugins, self.action_rules)
         # Handle rules built from key-value pairs
-        elif type(rule) == dict:
-            for r in rule:
-                self.add_rule(r, rule[r], self.available_action_plugins, self.action_rules)
+        elif type(rule_config_name) == dict:
+            for r in rule_config_name:
+                self.add_rule(r, rule_config_name[r], self.available_action_plugins, self.action_rules)
 
     def add_rule(self, config_name, value, plugins, destination):
+        """
+        Adds a rule. Use add_action_rule or add_match_rule instead
+        :param rule_wrapper: Rule wrapper class (ActionRule or MatchRule)
+        :param config_name: config_name of the plugin to add
+        :param value: configuration information for the rule
+        :param plugins: list of all available plugins
+        :param destination: list to append plugin to (self.action_rules or self.match_rules)
+        :return:
+        """
         if config_name in plugins:
-            destination.append(plugins[config_name](value))
+            rule = plugins[config_name](value)
+            destination.append(rule)
         else:
             self.logger.error("Plugin with config_name {0} not found".format(config_name))
             raise IndexError("Plugin with config_name {0} not found".format(config_name))
@@ -64,7 +85,7 @@ class RuleSet(object):
         """
 
         for rule in self.match_rules:
-            if rule.matches(target_filename) is False:
+            if rule.test(target_filename) is False:
                 return False
 
         self.logger.info('{0}: {1} - {2}'.format(self.name,

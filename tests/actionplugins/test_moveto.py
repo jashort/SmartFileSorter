@@ -12,8 +12,7 @@ import unittest
 import tempfile
 import os
 import shutil
-
-from smartfilesorter.actionrules.moveto import MoveTo
+from smartfilesorter.actionplugins.moveto import MoveTo
 
 
 class TestMoveTo(unittest.TestCase):
@@ -69,7 +68,8 @@ class TestMoveTo(unittest.TestCase):
         self.assertTrue(os.path.isfile(new_filename), "Destination file does not exist and should")
         self.assertTrue(new_filename[-8:-4] == '_002', 'New file does not end in "_002"')
 
-
+    def test_moveto_source_does_not_exist(self):
+        self.assertRaises(IOError, self.action.do_action, 'thisfiledoesnotexist.')
 
     def tearDown(self):
         # Clean up temp files

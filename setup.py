@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-import sys
-
 
 try:
     from setuptools import setup
@@ -19,27 +16,27 @@ requirements = [
 ]
 
 test_requirements = [
-    # TODO: put package test requirements here
 ]
 
 setup(
-    name='SmartFileSorter',
+    name='smartfilesorter',
     version='0.1.0',
-    description='Rule-based file mover/renamer',
+    description='Rule based file moving and renaming tool',
     long_description=readme + '\n\n' + history,
     author='Jason Short',
     author_email='jason@sheersky.com',
-    url='https://github.com/jashort/SmartFileSorter',
+    url='https://github.com/jashort/smartfilesorter',
     packages=[
         'smartfilesorter',
     ],
+    scripts=['bin/sfp'],
     package_dir={'smartfilesorter':
                  'smartfilesorter'},
     include_package_data=True,
     install_requires=requirements,
     license="BSD",
     zip_safe=False,
-    keywords='SmartFileSorter',
+    keywords='smartfilesorter',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',

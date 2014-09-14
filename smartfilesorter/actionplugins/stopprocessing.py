@@ -1,8 +1,7 @@
-from actionrule import ActionRule
-from actionrule import StopProcessingException
+from smartfilesorter.smartfilesorter import StopProcessingException
 
 
-class StopProcessing(ActionRule):
+class StopProcessing(object):
     """
     Stop processing rules and actions for the given file
     """
@@ -10,10 +9,10 @@ class StopProcessing(ActionRule):
 
     def __init__(self, value=None):
         # Nothing to do here - just call the parent __init__ function for logging
-        super(StopProcessing, self).__init__(value)
         self.continue_processing = False
 
-    def action(self, target, dry_run=False):
+    @staticmethod
+    def do_action(target, dry_run=False):
         """
         :param target: Full path and filename
         :param dry_run: True - don't actually perform action. False: perform action. No effect for this rule.

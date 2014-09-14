@@ -1,59 +1,69 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import argparse
 import sys
 import logging
 import os
 import yaml
 import inspect
-from ruleset import RuleSet
-from actionrule import StopProcessingException
+from .ruleset import RuleSet
 import docopt
+
+
+class StopProcessingException(BaseException):
+    """
+    Raised when processing should stop for the current file
+    """
+    pass
+
 
 class SmartFileSorter(object):
     def __init__(self):
-        self.logger = logging.getLogger('SmartFileSorter')
         self.args = None
+        self.logger = None
+        self.match_plugins = []
+        self.action_plugins = []
 
-    def parse_arguments(self):
+    @staticmethod
+    def parse_arguments(arguments=sys.argv[1:]):
         """
         Process command line arguments
-        :return: object
+        :param: List of strings containing command line arguments, defaults to sys.argv[1:]
+        :return: docopt args object
         """
-        # Define and parse command line arguments
-        self.args = docopt.docopt("""
+        args = docopt.docopt(doc="""
 Smart File Sorter
 
 Usage:
-  sfs.py RULEFILE DIRECTORY [--debug] [--dry-run] [--log <filename>]
-  sfs.py [--debug] --list-plugins
+  sfp RULEFILE DIRECTORY [--debug] [--dry-run] [--log LOGFILE]
+  sfp [--debug] --list-plugins
 
+Options:
     RULEFILE        Rule configuration file to execute
     DIRECTORY       Directory of files to process
     --debug         Log extra information during processing
     --dry-run       Log actions but do not make any changes
-    --log FILE      Specify log output file
+    --log LOGFILE   Specify log output file
     --list-plugins  Print match and action plugin information
-        """)
-        return self.args
+        """, argv=arguments)
+        return args
 
-    def create_logger(self, args):
+    def create_logger(self, args={}):
         """
-        Configure the program's logger object.
+        Create and configure the program's logger object.
 
         Log levels:
         DEBUG - Log everything. Hidden unless --debug is used.
         INFO - information only
         ERROR - Critical error
         :param args: Object containing program's parsed command line arguments
-        :return:
+        :return: None
         """
         # Set up logging
-        self.logger.level = logging.INFO
+        logger = logging.getLogger("SmartFileSorter")
+        logger.level = logging.INFO
 
-        if args['--debug'] is True:
-            self.logger.setLevel(logging.DEBUG)
+        if '--debug' in args and args['--debug'] is True:
+            logger.setLevel(logging.DEBUG)
 
         file_log_formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)s %(message)s',
                                                '%Y-%m-%d %H:%M:%S')
@@ -62,17 +72,18 @@ Usage:
         # Log to stdout
         stdout_stream = logging.StreamHandler(stream=sys.stdout)
         stdout_stream.setFormatter(console_log_formatter)
-        self.logger.addHandler(stdout_stream)
+        logger.addHandler(stdout_stream)
 
         # Log to file if the option is chosen
-        if args['--log'] is not None:
+        if '--log' in args and args['--log'] is not None:
             logfile = open(args['--log'], 'w')
             logfile_stream = logging.StreamHandler(stream=logfile)
             logfile_stream.setFormatter(file_log_formatter)
-            self.logger.addHandler(logfile_stream)
+            logger.addHandler(logfile_stream)
 
-        if args['--dry-run'] is True:
-            self.logger.info('Running with --dry-run parameter. Actions will not be executed.')
+        if '--dry-run' in args and args['--dry-run'] is True:
+            logger.info('Running with --dry-run parameter. Actions will not be performed.')
+        self.logger = logger
 
     def get_files(self, path):
         """
@@ -94,9 +105,9 @@ Usage:
                 cur_file = os.path.join(path, f)
                 if f[0] != '.' and os.path.isfile(cur_file):
                     yield cur_file
-        except OSError:
+        except FileNotFoundError:
             self.logger.error('Could not read files from {0}'.format(path))
-            sys.exit(1)
+            raise
 
     def load_rules(self, filename):
         """
@@ -109,16 +120,18 @@ Usage:
             in_file = open(filename)
         except IOError:
             self.logger.error('Error opening {0}'.format(filename))
-            sys.exit(1)
+            raise
 
+        y = None
         try:
             y = yaml.load(in_file)
         except yaml.YAMLError as exc:
             if hasattr(exc, 'problem_mark'):
                 self.logger.error('Error parsing rules{0}'.format(exc.problem_mark))
+
             else:
                 self.logger.error('Error parsing rules in {0}'.format(in_file.name))
-            sys.exit(1)
+            raise
         return y
 
     def load_plugins(self, plugin_path):
@@ -150,14 +163,14 @@ Usage:
                 self.logger.debug('Adding plugin from: {0}'.format(f))
                 mod = __import__(name, globals(), locals(), [], 0)
 
-                for piece in inspect.getmembers(mod):
-                    if piece[0][0:2] == '__':            # Skip dunder members - builtins, etc
+                for plugin_class in inspect.getmembers(mod):
+                    if plugin_class[0][0:2] == '__':            # Skip dunder members - builtins, etc
                         continue
-                    if hasattr(piece[1], 'config_name'):
-                        if piece[1].config_name is not None:
+                    if hasattr(plugin_class[1], 'config_name'):
+                        if plugin_class[1].config_name is not None:
                             # Skip plugins where config_name is None, like the base classes
-                            plugins[piece[1].config_name] = piece[1]
-                            self.logger.debug('Added plugin: {0}'.format(piece[1].config_name))
+                            plugins[plugin_class[1].config_name] = plugin_class[1]
+                            self.logger.debug('Added plugin: {0}'.format(plugin_class[1].config_name))
 
                             # Todo: Add error checking here. If a plugin with that name already exists,
                             # log an error. Quit or continue?
@@ -169,7 +182,8 @@ Usage:
         self.logger.debug('Done loading plugins')
         return plugins
 
-    def build_rules(self, rule_yaml, match_plugins, action_plugins):
+    @staticmethod
+    def build_rules(rule_yaml, match_plugins, action_plugins):
         """
         Convert parsed rule YAML in to a list of ruleset objects
         :param rule_yaml: Dictionary parsed from YAML rule file
@@ -183,44 +197,45 @@ Usage:
             rule_sets.append(RuleSet(yaml_section, match_plugins=match_plugins, action_plugins=action_plugins))
         return rule_sets
 
+    def run(self, args):
+        """
+        Load plugins and run with the configuration given in args
+        :param args: Object containing program's parsed command line arguments
+        :return: None\
+        """
+        module_dir = os.path.dirname(__file__)
 
-if __name__ == '__main__':
-    script_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
-    m = SmartFileSorter()
-    args = m.parse_arguments()
-    m.create_logger(args)
+        self.match_plugins = self.load_plugins(os.path.join(module_dir, 'matchplugins/'))
+        self.action_plugins = self.load_plugins(os.path.join(module_dir, 'actionplugins/'))
 
-    match_plugins = m.load_plugins(os.path.join(script_dir, 'matchrules/'))
-    action_plugins = m.load_plugins(os.path.join(script_dir, 'actionrules/'))
+        if args['--list-plugins'] is True:
+            print("\nAvailable Match Plugins:")
+            for m in sorted(self.match_plugins):
+                print(m)
+            print("\nAvailable Action Plugins:")
+            for a in sorted(self.action_plugins):
+                print(a)
+            sys.exit()
 
-    if args['--list-plugins'] is True:
-        print("\nAvailable Match Plugins:")
-        for m in sorted(match_plugins):
-            print(m)
-        print("\nAvailable Action Plugins:")
-        for a in sorted(action_plugins):
-            print(a)
-        sys.exit()
+        rule_yaml = self.load_rules(args['RULEFILE'])
+        rules = self.build_rules(rule_yaml, self.match_plugins, self.action_plugins)
 
-    rule_yaml = m.load_rules(args['RULEFILE'])
-    rules = m.build_rules(rule_yaml, match_plugins, action_plugins)
+        files_analyzed = 0
+        files_matched = 0
 
-    files_analyzed = 0
-    files_matched = 0
+        for cur_file in self.get_files(args['DIRECTORY']):
+            self.logger.debug("Processing {0}".format(cur_file))
+            files_analyzed += 1
 
-    for cur_file in m.get_files(args['DIRECTORY']):
-        m.logger.debug("Processing {0}".format(cur_file))
-        files_analyzed += 1
+            for ruleset in rules:
+                if ruleset.matches_all_rules(cur_file):
+                    files_matched += 1
+                    # If the file matches all rules in the ruleset, do whatever
+                    # actions the ruleset specifies. Stop processing if the
+                    # ruleset says stop.
+                    try:
+                        ruleset.do_actions(cur_file, args['--dry-run'])
+                    except StopProcessingException:
+                        break
 
-        for ruleset in rules:
-            if ruleset.matches_all_rules(cur_file):
-                files_matched += 1
-                # If the file matches all rules in the ruleset, do whatever
-                # actions the ruleset specifies. Stop processing if the
-                # ruleset says stop.
-                try:
-                    ruleset.do_actions(cur_file, args['--dry-run'])
-                except StopProcessingException:
-                    break
-
-    m.logger.info("Files matched: {0}/{1}".format(files_matched, files_analyzed))
+        self.logger.info("Files matched: {0}/{1}".format(files_matched, files_analyzed))

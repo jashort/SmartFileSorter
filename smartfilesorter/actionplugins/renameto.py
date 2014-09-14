@@ -1,10 +1,10 @@
-from actionrule import ActionRule
 import shutil
 import os
 import re
+import logging
 
 
-class RenameTo(ActionRule):
+class RenameTo(object):
     """
     Renames a given file. Performs a case sensitive search and replace on the filename, then renames it.
     Also supports regular expressions.
@@ -12,7 +12,7 @@ class RenameTo(ActionRule):
     config_name = 'rename-to'
 
     def __init__(self, parameters):
-        super(RenameTo, self).__init__(parameters)
+        self.logger = logging.getLogger(__name__)
         if 'match' in parameters:
             self.match = parameters['match']
         else:
@@ -25,7 +25,7 @@ class RenameTo(ActionRule):
         else:
             raise ValueError('rename-to rule must have "replace-with" parameter')
 
-    def action(self, target, dry_run=False):
+    def do_action(self, target, dry_run=False):
         """
         :param target: Full path and filename
         :param dry_run: True - don't actually perform action. False: perform action. No effect for this rule.

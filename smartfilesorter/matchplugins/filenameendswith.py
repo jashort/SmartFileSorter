@@ -1,19 +1,18 @@
-from matchrule import MatchRule
 import os
 
 
-class FilenameEndsWith(MatchRule):
+class FilenameEndsWith(object):
     """
     Tests if a filename ends with these characters. File path and extension are ignored.
     """
     config_name = 'filename-ends-with'
 
-    def __init__(self, match_value):
+    def __init__(self, match_value, case_sensitive=False):
         """
         :param match_value: A string containing characters to match at the end of a filename
         """
-        super(FilenameEndsWith, self).__init__()
         self.match_value = match_value
+        self.case_sensitive = case_sensitive
 
     def test(self, target):
         """

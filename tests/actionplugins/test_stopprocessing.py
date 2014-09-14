@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 """
 test_stopprocessing.py
 ----------------------------------
@@ -9,8 +6,8 @@ Tests for action rule stopprocessing
 """
 
 import unittest
-from smartfilesorter.actionrules.stopprocessing import StopProcessing
-from actionrule import StopProcessingException
+from smartfilesorter.actionplugins.stopprocessing import StopProcessing
+from smartfilesorter.smartfilesorter import StopProcessingException
 
 
 class TestStopProcessing(unittest.TestCase):

@@ -1,20 +1,20 @@
-from actionrule import ActionRule
 import shutil
 import os
+import logging
 
 
-class MoveTo(ActionRule):
+class MoveTo(object):
     """
     Moves a given file to a new directory
     """
     config_name = 'move-to'
 
     def __init__(self, destination):
-        super(MoveTo, self).__init__(destination)
         self.destination = os.path.expanduser(destination)
         self.continue_processing = False
+        self.logger = logging.getLogger(__name__)
 
-    def action(self, target, dry_run=False):
+    def do_action(self, target, dry_run=False):
         """
         :param target: Full path and filename
         :param dry_run: True - don't actually perform action. False: perform action.

@@ -4,9 +4,9 @@ Installation
 
 At the command line::
 
-    $ easy_install smartfilemover
+    $ easy_install SmartFileSorter
 
 Or, if you have virtualenvwrapper installed::
 
-    $ mkvirtualenv smartfilemover
-    $ pip install smartfilemover
+    $ mkvirtualenv SmartFileSorter
+    $ pip install SmartFileSorter

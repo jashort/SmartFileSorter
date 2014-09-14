@@ -1,20 +1,18 @@
-from matchrule import MatchRule
 import os
-import re
 
 
-class FilenameMatches(MatchRule):
+class FilenameContains(object):
     """
-    Tests if a filename matches the given regular expression. File path and extension are ignored.
+    Tests if a filename contains these characters. File path and extension are ignored.
     """
-    config_name = 'filename-matches'
+    config_name = 'filename-contains'
 
-    def __init__(self, match_value):
+    def __init__(self, match_value, case_sensitive=False):
         """
         :param match_value: A string containing characters to match anywhere in a filename
         """
-        super(FilenameMatches, self).__init__()
         self.match_value = match_value
+        self.case_sensitive = case_sensitive
 
     def test(self, target):
         """
@@ -23,8 +21,7 @@ class FilenameMatches(MatchRule):
         """
         path, filename = os.path.split(target)
         filename, extension = os.path.splitext(filename)
-
-        if re.match(self.match_value, filename) is not None:
-            return True
+        if self.case_sensitive:
+            return self.match_value in filename
         else:
-            return False
+            return self.match_value.lower() in filename.lower()
