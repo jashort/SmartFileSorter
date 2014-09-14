@@ -28,6 +28,8 @@ setup(
     url='https://github.com/jashort/smartfilesorter',
     packages=[
         'smartfilesorter',
+        'smartfilesorter.actionplugins',
+        'smartfilesorter.matchplugins'
     ],
     scripts=['bin/sfs'],
     package_dir={'smartfilesorter':
