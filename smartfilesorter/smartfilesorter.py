@@ -105,7 +105,7 @@ Options:
                 cur_file = os.path.join(path, f)
                 if f[0] != '.' and os.path.isfile(cur_file):
                     yield cur_file
-        except FileNotFoundError:
+        except OSError:
             self.logger.error('Could not read files from {0}'.format(path))
             raise
 

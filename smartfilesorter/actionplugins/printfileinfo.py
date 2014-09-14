@@ -23,7 +23,7 @@ class PrintFileInfo(object):
                 filename = os.path.basename(target)
                 size = os.path.getsize(target)
                 print("{0}\t{1}".format(filename, size))
-            except IOError:
+            except OSError:
                 self.logger.error("Error getting size for file: {0}".format(target))
 
         return target
