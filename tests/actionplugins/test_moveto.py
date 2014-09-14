@@ -61,12 +61,13 @@ class TestMoveTo(unittest.TestCase):
         shutil.copy(self.source_file, self.dest_dir)
         filename, extension = os.path.splitext(self.dest_file)
         file1 = os.path.join(self.dest_dir, (filename + '_001' + extension))
+        file2 = os.path.join(self.dest_dir, (filename + '_002' + extension))
         shutil.copy(self.source_file, file1)
 
         new_filename = self.action.do_action(self.source_file)
         self.assertFalse(os.path.isfile(self.source_file), "Source file exists and should have been moved")
         self.assertTrue(os.path.isfile(new_filename), "Destination file does not exist and should")
-        self.assertTrue(new_filename[-8:-4] == '_002', 'New file does not end in "_002"')
+        self.assertTrue(new_filename == file2, 'New file does not have the correct name')
 
     def test_moveto_source_does_not_exist(self):
         self.assertRaises(IOError, self.action.do_action, 'thisfiledoesnotexist.')
