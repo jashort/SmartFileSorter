@@ -53,7 +53,8 @@ docs:
 	sphinx-apidoc -o docs/ smartfilesorter
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
-	open docs/_build/html/index.html
+	#open docs/_build/html/index.html
+	xdg-open docs/_build/html/index.html
 
 release: clean
 	python setup.py sdist upload
