@@ -8,7 +8,7 @@ Smart File Sorter
 .. image:: https://travis-ci.org/jashort/SmartFileSorter.png?branch=master
         :target: https://travis-ci.org/jashort/SmartFileSorter
 
-.. image:: https://pypip.in/d/SmartFileSorter/badge.png
+.. image:: https://pypip.in/download/SmartFileSorter/badge.png
         :target: https://pypi.python.org/pypi/SmartFileSorter
 
 

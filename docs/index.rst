@@ -14,6 +14,8 @@ Contents:
    readme
    installation
    usage
+   matchplugins
+   actionplugins
    contributing
    authors
    history

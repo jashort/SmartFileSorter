@@ -5,4 +5,4 @@ from smartfilesorter.smartfilesorter import SmartFileSorter  # noqa
 
 __author__ = 'Jason Short'
 __email__ = 'jason@sheersky.com'
-__version__ = '0.1.0'
+__version__ = '0.2.0'

@@ -75,7 +75,7 @@ class TestSmartFileSorter(unittest.TestCase):
 
     def test_list_files_path_does_not_exist(self):
         f = self.s.get_files('asdfsadf')
-        self.assertRaises(FileNotFoundError, f.send, None)
+        self.assertRaises(OSError, f.send, None)
 
     def test_load_plugins(self):
         module_path = os.path.dirname(smartfilesorter.__file__)
@@ -95,7 +95,7 @@ class TestSmartFileSorter(unittest.TestCase):
         self.assertTrue('action' in rules[0])
 
     def test_load_rules_file_does_not_exist(self):
-        self.assertRaises(FileNotFoundError, self.s.load_rules, 'thisfiledoesnotexist')
+        self.assertRaises(IOError, self.s.load_rules, 'thisfiledoesnotexist')
 
     def test_load_rules_invalid_yaml_in_file(self):
         test_path = os.path.dirname(__file__)
