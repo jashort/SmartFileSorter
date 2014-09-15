@@ -12,20 +12,22 @@ readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 requirements = [
-    # TODO: put package requirements here
+    'wheel',
+    'PyYAML',
+    'docopt'
 ]
 
 test_requirements = [
 ]
 
 setup(
-    name='smartfilesorter',
+    name='SmartFileSorter',
     version='0.1.0',
     description='Rule based file moving and renaming tool',
     long_description=readme + '\n\n' + history,
     author='Jason Short',
     author_email='jason@sheersky.com',
-    url='https://github.com/jashort/smartfilesorter',
+    url='https://github.com/jashort/SmartFileSorter',
     packages=[
         'smartfilesorter',
         'smartfilesorter.actionplugins',
