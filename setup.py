@@ -44,6 +44,7 @@ setup(
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
+        'Intended Audience :: System Administrators',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
         "Programming Language :: Python :: 2",
@@ -51,6 +52,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Topic :: Utilities'
     ],
     test_suite='tests',
     tests_require=test_requirements
