@@ -2,13 +2,13 @@
 Smart File Sorter
 ===============================
 
-.. image:: https://badge.fury.io/py/smartfilesorter.png
+.. image:: https://badge.fury.io/py/SmartFileSorter.png
     :target: http://badge.fury.io/py/SmartFileSorter
 
-.. image:: https://travis-ci.org/jashort/smartfilesorter.png?branch=master
+.. image:: https://travis-ci.org/jashort/SmartFileSorter.png?branch=master
         :target: https://travis-ci.org/jashort/SmartFileSorter
 
-.. image:: https://pypip.in/d/smartfilesorter/badge.png
+.. image:: https://pypip.in/d/SmartFileSorter/badge.png
         :target: https://pypi.python.org/pypi/SmartFileSorter
 
 
