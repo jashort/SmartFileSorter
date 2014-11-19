@@ -9,13 +9,6 @@ from .ruleset import RuleSet
 import docopt
 
 
-class StopProcessingException(BaseException):
-    """
-    Raised when processing should stop for the current file
-    """
-    pass
-
-
 class SmartFileSorter(object):
     def __init__(self):
         self.args = None
