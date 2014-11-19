@@ -6,6 +6,7 @@ import os
 import yaml
 import inspect
 from .ruleset import RuleSet
+from .exceptions import StopProcessingException
 import docopt
 
 
@@ -194,10 +195,9 @@ Options:
         """
         Load plugins and run with the configuration given in args
         :param args: Object containing program's parsed command line arguments
-        :return: None\
+        :return: None
         """
         module_dir = os.path.dirname(__file__)
-
         self.match_plugins = self.load_plugins(os.path.join(module_dir, 'matchplugins/'))
         self.action_plugins = self.load_plugins(os.path.join(module_dir, 'actionplugins/'))
 
@@ -229,6 +229,7 @@ Options:
                     try:
                         ruleset.do_actions(cur_file, args['--dry-run'])
                     except StopProcessingException:
+                        print("Stop Processing Exception raised")
                         break
 
         self.logger.info("Files matched: {0}/{1}".format(files_matched, files_analyzed))

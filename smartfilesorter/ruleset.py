@@ -1,5 +1,6 @@
 import logging
 import os
+from .exceptions import StopProcessingException
 
 
 class RuleSet(object):
@@ -102,7 +103,7 @@ class RuleSet(object):
         for rule in self.action_rules:
                 target_filename = rule.do_action(target_filename, dry_run)
 
-        return target_filename
+        raise StopProcessingException
 
     def add_action_rules(self, action_rules):
         """

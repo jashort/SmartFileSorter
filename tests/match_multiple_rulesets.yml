@@ -1,0 +1,22 @@
+#-----------------------------------------------------------------------------
+# Test SmartFileSorter rule file
+# Will match the file test.txt with multiple rules
+#-----------------------------------------------------------------------------
+
+- name: Ruleset 1
+  match:
+    - file-extension-is: .txt
+    - filename-starts-with: test
+  action:
+    - rename-to:
+        match: test
+        replace-with: moved
+
+- name: Ruleset 2
+  match:
+    - file-extension-is: .txt
+    - filename-starts-with: test
+  action:
+    - rename-to:
+        match: test
+        replace-with: moved
