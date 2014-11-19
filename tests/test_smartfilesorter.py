@@ -15,6 +15,7 @@ from docopt import DocoptExit
 import os
 from yaml import YAMLError
 import tempfile
+import shutil
 
 
 class TestSmartFileSorter(unittest.TestCase):
@@ -108,7 +109,8 @@ class TestSmartFileSorter(unittest.TestCase):
         self.assertRaises(SystemExit, self.s.run, args)
 
     def tearDown(self):
-        pass
+        shutil.rmtree(self.tmp_dir)
+
 
 if __name__ == '__main__':
     unittest.main()
