@@ -229,7 +229,6 @@ Options:
                     try:
                         ruleset.do_actions(cur_file, args['--dry-run'])
                     except StopProcessingException:
-                        print("Stop Processing Exception raised")
                         break
 
         self.logger.info("Files matched: {0}/{1}".format(files_matched, files_analyzed))
