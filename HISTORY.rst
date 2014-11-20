@@ -9,6 +9,7 @@ History
 * Added test for that
 * Tests will clean up temporary files after they run
 * Log files that match a rule at the debug level instead of info (less verbose output at standard log level)
+* After running, log the number of files that each ruleset matched.
 
 
 0.2.0 (2014-09-15)

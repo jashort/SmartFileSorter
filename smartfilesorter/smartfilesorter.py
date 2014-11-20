@@ -8,6 +8,7 @@ import inspect
 from .ruleset import RuleSet
 from .exceptions import StopProcessingException
 import docopt
+import collections
 
 
 class SmartFileSorter(object):
@@ -215,6 +216,7 @@ Options:
 
         files_analyzed = 0
         files_matched = 0
+        result_count = collections.defaultdict(int)
 
         for cur_file in self.get_files(args['DIRECTORY']):
             self.logger.debug("Processing {0}".format(cur_file))
@@ -223,6 +225,7 @@ Options:
             for ruleset in rules:
                 if ruleset.matches_all_rules(cur_file):
                     files_matched += 1
+                    result_count[ruleset] += 1
                     # If the file matches all rules in the ruleset, do whatever
                     # actions the ruleset specifies. Stop processing if the
                     # ruleset says stop.
@@ -232,3 +235,5 @@ Options:
                         break
 
         self.logger.info("Files matched: {0}/{1}".format(files_matched, files_analyzed))
+        for ruleset in sorted(result_count):
+            self.logger.info("{0}: {1} files".format(ruleset.name, result_count[ruleset]))
