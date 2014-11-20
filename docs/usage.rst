@@ -28,16 +28,14 @@ this::
 
     $ sfs test.yml /tmp --dry-run
     Running with --dry-run parameter. Actions will not be performed.
-    Move Logs: test1.log - Match
-    Move Logs: test2.log - Match
     Files matched: 2/10
+    Move Logs: 2 files
 
 And to actually move the files, run without the --dry-run parameter::
 
     $ sfs test.yml /tmp
-    Move Logs: test1.log - Match
-    Move Logs: test2.log - Match
     Files matched: 2/10
+    Move Logs: 2 files
 
 The two files would be moved to the directory /archive.
 
@@ -91,18 +89,16 @@ Use --dry-run to see what files would be affected::
 
     $ sfs test2.yml /tmp --dry-run
     Running with --dry-run parameter. Actions will not be performed.
-    Move Logs: test-13-05-01.log - Match
-    Move Logs: test-14-01-01.log - Match
-    Move Logs: test-14-01-02.log - Match
     Files matched: 3/3
+    Move and Rename 2013 data: 1 file(s)
+    Move and Rename 2014 data: 2 file(s)
 
 And to actually move the files, run without the --dry-run parameter::
 
     $ sfs test2.yml /tmp
-    Move Logs: test-13-05-01.log - Match
-    Move Logs: test-14-01-01.log - Match
-    Move Logs: test-14-01-02.log - Match
     Files matched: 3/3
+    Move and Rename 2013 data: 1 file(s)
+    Move and Rename 2014 data: 2 file(s)
 
 Here are the results::
 
