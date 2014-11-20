@@ -90,8 +90,8 @@ class RuleSet(object):
                 return False
 
         self.logger.debug('{0}: {1} - {2}'.format(self.name,
-                                                 os.path.basename(target_filename),
-                                                 'Match'))
+                                                  os.path.basename(target_filename),
+                                                  'Match'))
         return True
 
     def do_actions(self, target_filename, dry_run=False):

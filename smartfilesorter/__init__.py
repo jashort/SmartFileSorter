@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import
 from smartfilesorter.smartfilesorter import SmartFileSorter  # noqa
-from smartfilesorter.exceptions import StopProcessingException # noqa
+from smartfilesorter.exceptions import StopProcessingException  # noqa
 
 __author__ = 'Jason Short'
 __email__ = 'jason@sheersky.com'

@@ -4,6 +4,7 @@ import os
 import tempfile
 import shutil
 
+
 class TestIntegrationTests(unittest.TestCase):
     """
     Broader test cases
@@ -23,8 +24,7 @@ class TestIntegrationTests(unittest.TestCase):
         self.s = smartfilesorter.SmartFileSorter()
 
     def tearDown(self):
-        #shutil.rmtree(self.source_dir)
-        pass
+        shutil.rmtree(self.source_dir)
 
     def test_file_matches_multiple_rulesets(self):
         test_path = os.path.dirname(__file__)
@@ -32,6 +32,3 @@ class TestIntegrationTests(unittest.TestCase):
         self.s.args = self.s.parse_arguments([test_file, self.source_dir])
         self.s.create_logger(self.s.args)
         self.s.run(self.s.args)
-
-
-
