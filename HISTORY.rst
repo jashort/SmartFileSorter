@@ -8,6 +8,7 @@ History
 * Processing will stop for a file after the first ruleset matches and actions are performed.
 * Added test for that
 * Tests will clean up temporary files after they run
+* Log files that match a rule at the debug level instead of info (less verbose output at standard log level)
 
 
 0.2.0 (2014-09-15)

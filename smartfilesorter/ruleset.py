@@ -89,7 +89,7 @@ class RuleSet(object):
             if rule.test(target_filename) is False:
                 return False
 
-        self.logger.info('{0}: {1} - {2}'.format(self.name,
+        self.logger.debug('{0}: {1} - {2}'.format(self.name,
                                                  os.path.basename(target_filename),
                                                  'Match'))
         return True
