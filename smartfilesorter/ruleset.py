@@ -101,7 +101,7 @@ class RuleSet(object):
         :retrn: filename Filename and path after any actions have been completed
 \        """
         for rule in self.action_rules:
-                target_filename = rule.do_action(target_filename, dry_run)
+            target_filename = rule.do_action(target_filename, dry_run)
 
         raise StopProcessingException
 
