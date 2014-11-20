@@ -31,6 +31,9 @@ class RuleSet(object):
     def __repr__(self):
         return 'Ruleset: {0}'.format(self.name)
 
+    def __lt__(self, other):
+        return self.name < other.name
+
     def add_match_rule(self, rule_config_name):
         """
         Adds the given match rule to this ruleset's match rules

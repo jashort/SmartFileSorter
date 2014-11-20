@@ -2,6 +2,11 @@
 
 History
 -------
+0.4.0 (2014-11-18)
+--------------------
+
+* Fixed bug that threw an error when running under Python3
+
 0.3.0 (2014-11-18)
 --------------------
 
